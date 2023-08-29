@@ -58,7 +58,8 @@ const displayUI = (data, showAll) => {
     </div>
     <div class=" rounded-lg  items-center flex justify-between w-11/12">
       <p class="text-sm font-semibold" id="dateDisplay">${data.published_in}</p>
-      <button  onclick="my_modal_3.showModal(),showDetails(${data.id})"  class="btn btn-active btn-ghost">Details</button>
+      <button  onclick="my_modal_4.showModal(),showDetails(${data.id})"  class="btn btn-active btn-ghost">Details</button>
+      
 
     </div>
 
@@ -104,6 +105,27 @@ const showDetails = async (id) => {
     `https://openapi.programming-hero.com/api/ai/tool/0${id}`
   );
   const dataList = await response.json();
-  console.log(dataList);
-  const data = dataList.data.tools;
+  const data = dataList.data;
+
+  const descrip = document.getElementById("descrip");
+  const feater = document.querySelector(".feature");
+
+  descrip.innerText = data.description;
+  console.log(data);
+  const features = data.features;
+  console.log(features);
+  feater.innerHTML = "";
+  for (const key in features) {
+    console.log(key);
+    const li = document.createElement("li");
+    li.innerText = `${features[key].feature_name}`;
+    console.log();
+    feater.appendChild(li);
+  }
+
+  // features.forEach((data) => {
+  //   const li = document.createElement("li");
+  //   li.innerText = `${data}`;
+  //   feater.appendChild(li);
+  // });
 };
