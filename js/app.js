@@ -13,7 +13,7 @@ const showBtn = document.getElementById("showAllbt");
 const showBtn2 = document.getElementById("showAllbt2");
 const aiContainer = document.getElementById("ai_container");
 const displayUI = (data, showAll) => {
-  console.log(data.length);
+  // console.log(data.length);
   let dataa = data;
   if (showAll) {
     dataa = data.slice(0, 6);
@@ -58,7 +58,7 @@ const displayUI = (data, showAll) => {
     </div>
     <div class=" rounded-lg  items-center flex justify-between w-11/12">
       <p class="text-sm font-semibold" id="dateDisplay">${data.published_in}</p>
-      <button  class="btn btn-active btn-ghost">Details</button>
+      <button  onclick="my_modal_3.showModal(),showDetails(${data.id})"  class="btn btn-active btn-ghost">Details</button>
 
     </div>
 
@@ -80,6 +80,7 @@ const displayUI = (data, showAll) => {
 };
 function getOut(data) {
   console.log(data);
+
   data.forEach((data) => {
     const featuresContainer = document.getElementById(data.id);
     const features = data.features;
@@ -97,3 +98,12 @@ function btnWork(data) {
 function btnWork2(data) {
   loadAiContent(true);
 }
+
+const showDetails = async (id) => {
+  const response = await fetch(
+    `https://openapi.programming-hero.com/api/ai/tool/0${id}`
+  );
+  const dataList = await response.json();
+  console.log(dataList);
+  const data = dataList.data.tools;
+};
