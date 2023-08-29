@@ -1,27 +1,42 @@
-const loadAiContent = async () => {
+const loadAiContent = async (btnWork) => {
   const response = await fetch(
-    "https://openapi.programming-hero.com/api/ai/tool/01"
+    "https://openapi.programming-hero.com/api/ai/tools"
   );
   const dataList = await response.json();
-  const data = dataList.data;
+  const data = dataList.data.tools;
 
-  console.log(data);
+  displayUI(data, btnWork);
+  getOut(data);
 };
-loadAiContent();
-const displayUI = () => {
-  const display = `
-  <div>
+loadAiContent(true);
+const showBtn = document.getElementById("showAllbt");
+const showBtn2 = document.getElementById("showAllbt2");
+const aiContainer = document.getElementById("ai_container");
+const displayUI = (data, showAll) => {
+  console.log(data.length);
+  let dataa = data;
+  if (showAll) {
+    dataa = data.slice(0, 6);
+  }
+  aiContainer.innerHTML = "";
+  dataa.forEach((data) => {
+    // console.log(data);
+    const display = document.createElement("div");
+    const featuresContainer = document.getElementById("features_container");
+
+    display.innerHTML = `
+  <div class='shadow-lg border-solid border-2 border-indigo-600 p-6'>
 
 
   <div class="rounded  flex justify-center">
-    <img src="image/chatGpt.jpg" alt="" class=" rounded-lg">
+    <img src="${data?.image}" alt="data Image" class=" rounded-lg">
   </div>
   <div>
     <h2 class="text-2xl font-semibold ">Features</h2>
   </div>
   <div>
-    <ol class="text-[#585858] text-base list-decimal ml-7">
-      <li>Natural language processing</li>
+    <ol id="${data.id}" class="text-[#585858] text-base list-decimal ml-7">
+   
 
     </ol>
   </div>
@@ -30,7 +45,7 @@ const displayUI = () => {
   <!-- line  -->
 
   <div class="mb-3">
-    <h2 class="text-2xl font-semibold ">ChatGPT</h2>
+    <h2 class="text-2xl font-semibold ">${data.name}</h2>
 
   </div>
   <div class="flex gap-3 items-center">
@@ -41,12 +56,44 @@ const displayUI = () => {
           stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </div>
-    <div class=" rounded-lg  inline-block  items-center">
-      <p class="text-sm font-semibold" id="dateDisplay">11/01/2022</p>
+    <div class=" rounded-lg  items-center flex justify-between w-11/12">
+      <p class="text-sm font-semibold" id="dateDisplay">${data.published_in}</p>
+      <button  class="btn btn-active btn-ghost">Details</button>
 
     </div>
 
   </div>
 </div>
 `;
+    aiContainer.appendChild(display);
+  });
+  if (dataa.length > 6) {
+    showBtn.classList.add("hidden");
+  } else {
+    showBtn.classList.remove("hidden");
+  }
+  if (dataa.length > 6) {
+    showBtn2.classList.remove("hidden");
+  } else {
+    showBtn2.classList.add("hidden");
+  }
 };
+function getOut(data) {
+  console.log(data);
+  data.forEach((data) => {
+    const featuresContainer = document.getElementById(data.id);
+    const features = data.features;
+    features.forEach((data) => {
+      const li = document.createElement("li");
+      li.innerText = `${data}`;
+      featuresContainer.appendChild(li);
+    });
+  });
+}
+
+function btnWork(data) {
+  loadAiContent(false);
+}
+function btnWork2(data) {
+  loadAiContent(true);
+}
